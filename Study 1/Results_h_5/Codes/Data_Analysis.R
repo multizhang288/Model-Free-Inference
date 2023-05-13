@@ -2,6 +2,7 @@ library(tidyr)
 library(stringr)
 library(ggplot2)
 ############################################
+#Set your own file path firstly
 setwd("D:/Project_Revision/MF_Inference_Simulations/Study 1/Results_h_5/Intermediate Data")
 file_names <- dir()
 d = length(file_names)
@@ -82,7 +83,9 @@ Record1 = data.frame(Record1)
 Record1[,5:14] = sapply(Record1[,5:14],as.numeric)
 Record1[,5:14] = sapply(Record1[,5:14],function(x) round(x,3))
 colnames(Record1)[1:4] = c("Method","n","model","penalty")
-write.csv(Record,paste("D:/Project_Revision/MF_Inference_Simulations/Study 1/Results_h_5/Result/Lasso","_h_",5,".csv",sep=""))
-write.csv(Record1,paste("D:/Project_Revision/MF_Inference_Simulations/Study 1/Results_h_5/Result/SCAD","_h_",5,".csv",sep=""))
+#write.csv(Record,paste("D:/Project_Revision/MF_Inference_Simulations/Study 1/Results_h_5/Result/Lasso","_h_",5,".csv",sep=""))
+#write.csv(Record1,paste("D:/Project_Revision/MF_Inference_Simulations/Study 1/Results_h_5/Result/SCAD","_h_",5,".csv",sep=""))
 }
+Record
+Record1
 
