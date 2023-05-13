@@ -1,3 +1,4 @@
+#set the path of this script
 root_path = getwd()#"D:/Project_Revision/MF_Inference_Simulations/Study 2/Semi-synthetic"
 source(paste(root_path,"/Functions_Semi.R",sep=""))
 ########

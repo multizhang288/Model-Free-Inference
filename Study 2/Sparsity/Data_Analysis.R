@@ -2,6 +2,7 @@ library(tidyr)
 library(stringr)
 library(ggplot2)
 ############################################
+#Set the path of the intermediate results
 setwd("D:/Project_Revision/MF_Inference_Simulations/Study 2/Sparsity/Intermediate Data")
 file_names <- dir()
 d = length(file_names)

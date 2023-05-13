@@ -2,7 +2,7 @@
 #This is a demo script
 #You can set the parameters as the paper to reproduce the results, the computational cost is high.
 ######################################
-#setwd("D:/Project_Revision/MF_Inference_Simulations/Study 2/Transformation/")#Set the path
+#setwd("D:/Project_Revision/MF_Inference_Simulations/Study 2/Transformation/")#Set the path of this script
 root_path = dirname(getwd())
 source(paste(root_path,"/Function-Study2.R",sep=""))
 #####

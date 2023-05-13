@@ -2,10 +2,12 @@
 #This is a demo script
 #You can set the parameters as the paper to reproduce the results, the computational cost is high.
 ######################################
+#Set the path of this script
+setwd("D:/Project_Revision/MF_Inference_Simulations/Study 2/Distribution")
 root_path = dirname(getwd())
 source(paste(root_path,"/Function-Study2.R",sep=""))
 #####
-repeatnum = 1000 #Num of replications
+repeatnum = 1000
 n=n1= 200
 p=20
 CovMatrix = matrix(rep(0,p^2),p,p)
