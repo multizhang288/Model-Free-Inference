@@ -28,10 +28,10 @@ for(i in 1:n)
 ###########################Run 500 times
 s = 10
 set.seed(1)
-location = 1:s
-h = 7
-hfix = -1
-delta = 1
+location = 1:s #index of active variables
+h = 7 #
+hfix = -1#hfix!=-1, set your own h. Otherwise h is fixed as 7
+delta = 1#signal strength
 for(model in c(1:5))
 {
 Record = Record0 = Record1 = Record_decor = NULL#

@@ -18,6 +18,8 @@ set.seed(2023)
 if(model == 1){interest = c(1,2,sample(3:p,2))}
 if(model == 3){interest = c(1,3,p,sample(index.ini[-c(1,3,p)],2))}
 if(model == 2){interest = c(1:4,sample(5:p,2))}
+rho = 0.5#Covariance matrix with AR(1) structure and rho = 0.5
+sigma = 1 #standard error of noise
 #############
 #The results are defaultly saved in the root_path, you can set your own saving address
 #setwd(paste(dirname(root_path),"/Intermediate Data",sep=""))

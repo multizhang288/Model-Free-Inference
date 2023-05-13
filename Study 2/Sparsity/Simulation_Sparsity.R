@@ -20,13 +20,12 @@ for(i in 1:p)
 }
 penalty = "lasso"
 model= 1 #1: model I', 2: model II', 3: model III', 4: model IV' and 5: model V'
-hfix= -1
+hfix= -1 #if hfix !=-1, you can choose h, otherwise h is fixed as 7 when model is 1-5.
 h=7
-delta=1
-Dist= "MVN" 
-Trans = "Bspline"
+delta=1 #signal strength
+Dist= "MVN" # "MVN","MSN","Mixture","Tdist","Chi"
 active="random" #random or consecutive. random means the indices of active variables are evenly distributed.
-Trans ="Bspline"
+Trans ="Bspline" #Poly, SIR, SIR2 or Bspline
 #Inactive = c(256,512,1024,1536)# Used when p =2000.
 Inactive = c(18)#The indices of inactive variables.
 Record = Record0 = Record1 = Record_decor = NULL
@@ -54,7 +53,7 @@ for(q in 1:repeatnum)
     h1 = Result0$h
     d1 = Result0$d
     Result = c(q,hfix,n,model,delta,Dist,Trans,active,s,d1,h1,penalty,Type1,Type2)
-    print(c(q,Dist,time1-time0,Type1))
+    print(c(q,s,time1-time0,Type1))
     write.csv(Result,paste("Impact_Model_",model,"_n_",n,"_h_",h1,"_s_",s,"_d_",d1,"_delta_",delta,"_Dist_",Dist,"_Trans_",Trans,"_active_",active,"_end.csv",sep=""),row.names = FALSE,col.names = FALSE) #save the numerical quantities of the first q repetitions.
     write.csv(Record0,paste("Pvalue_Model_",model,"_n_",n,"_h_",h1,"_s_",s,"_d_",d1,"_delta_",delta,"_Dist_",Dist,"_Trans_",Trans,"_active_",active,"_end.csv",sep=""),row.names = FALSE,col.names = FALSE) #save the pvalues of the first q repetitions.
     write.csv(Record1,paste("Stat_Model_",model,"_n_",n,"_h_",h1,"_s_",s,"_d_",d1,"_delta_",delta,"_Dist_",Dist,"_Trans_",Trans,"_active_",active,"_end.csv",sep=""),row.names = FALSE,col.names = FALSE) #save the statistics of the first q repetitions.

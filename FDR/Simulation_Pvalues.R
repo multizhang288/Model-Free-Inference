@@ -3,12 +3,14 @@ source("Functions_FDR.R")
 #####
 repeatnum = 1000 #Do not recommend running in local desktop
 n=n1= 400
-p=2000
+p=20
 model= 4 #Can select model 4 or 5
 h=5 
 penalty = "lasso" #SCAD or lasso
 s= 4 #Sparsity level
 Record = Record0 = Stat = NULL
+rho = 0.5#correlation coefficient in AR(1) Sigma
+sigma = 1# std of noise term 
 #############
 for(q in 1:repeatnum)
 {

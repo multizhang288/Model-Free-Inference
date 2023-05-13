@@ -15,6 +15,8 @@ h= 5 #Number of h
 penalty="lasso" # "lasso" or "SCAD"
 #Define the index of parameters of interest
 interest = c(1:5,1996:2000)
+rho = 0.5#Covariance matrix with AR(1) structure and rho = 0.5
+sigma = 1 #standard error of noise
 #############
 #The results are default saved in the root_path, you can set your own saving address
 #setwd(dir)
@@ -32,13 +34,13 @@ for(q in 1:repeatnum)
     Record_decor = rbind(Record_decor, Record_decor_add)
     Record0 = rbind(Record0,c(Pval1_save,Pval2_save))
     Type1 = apply(Record,2,mean)#
-    Type2 = apply(Record_decor,2,mean)
+    Type2 = apply(Record_decor,2,mean)#Empirical rejection rate of decorrelated score method
     Result = c(q,n,h,model,penalty,Type1,Type2)
-    print(c(q,Type1))#Output of empirical rejection rates of q replications
+    print(c(q,Type1))#Output of empirical rejection rates of Wn of q replications
     #Return the empirical rejection rate until q replications
-  #  write.csv(Result,paste("Impact_Model_",model,"_penalty_",penalty,"_n_",n,"_h_",h,".csv",sep=""),row.names = FALSE,col.names = FALSE)
+    write.csv(Result,paste("Impact_Model_",model,"_penalty_",penalty,"_n_",n,"_h_",h,".csv",sep=""),row.names = FALSE,col.names = FALSE)
     #Return the Pvalues of interested variables
-  #  write.csv(Record0,paste("Pvalue_Model_",model,"_penalty_",penalty,"_n_",n,"_h_",h,".csv",sep=""),row.names = FALSE,col.names = FALSE)
+    write.csv(Record0,paste("Pvalue_Model_",model,"_penalty_",penalty,"_n_",n,"_h_",h,".csv",sep=""),row.names = FALSE,col.names = FALSE)
     #    write.csv(Record1,paste("Stat_Model_",model,"_n_",n,"_h_",h1,"_s_",s,"_d_",d1,"_delta_",delta,"_choice1_",choice1,"_choice2_",choice2,"_active_",active,"_end.csv",sep=""),row.names = FALSE,col.names = FALSE)
   },error=function(e){cat("ERROR","\n")})
 }
