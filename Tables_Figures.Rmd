@@ -1,0 +1,591 @@
+---
+title: "Tables&Figures"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+date: "2023-04-17"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r library load}
+library(tidyr)
+library(stringr)
+library(ggplot2)
+library(patchwork)
+library(gridExtra)
+```
+
+```{r path}
+root_path = getwd()
+root_path
+setwd(root_path)
+```
+
+```{r Figure 1&2}
+#Figure 1&2
+address = paste(root_path,"/Study 1/Impact of h/Intermediate Data",sep="")
+file_names <- dir(address)
+d = length(file_names)
+Record1 = Record2 = Record3 = NULL
+for(i in 1:d)
+{
+  selects = file_names[i]
+  split = as.vector(str_split(selects,"_"))[[1]]
+  model = as.numeric(split[3])
+  penalty = split[5]
+  n = as.numeric(split[7])
+  h =  str_split(split[9],"\\.")[[1]]
+  h = as.numeric(h[1])
+  data = read.csv(paste(root_path,"/Study 1/Impact of h/Intermediate Data/",selects,sep=""))
+  data = t(data)
+  s = ifelse(model==1,2,0) + ifelse(model==2,4,0) + ifelse(model==3,3,0)
+  ERR = c(penalty,data[c(4,2,3,6:(7+s))])
+  if(model == 1)
+  {
+    Record1 = rbind(Record1,ERR)
+  }
+  if(model == 2)
+  {
+    Record2 = rbind(Record2,ERR)
+  }
+  if(model == 3)
+  {
+    Record3 = rbind(Record3,ERR)
+  }
+}
+Record1 = data.frame(Record1)
+colnames(Record1)[1:4] = c("penalty","model","n","h")
+Record2 = data.frame(Record2)
+colnames(Record2)[1:4] = c("penalty","model","n","h")
+Record3 = data.frame(Record3)
+colnames(Record3)[1:4] = c("penalty","model","n","h")
+#########################################Let's plot
+for(penalty in c("lasso","SCAD"))
+{
+Plot_save = NULL
+my_plots <- list()
+i = 1
+for(model in 1:3)
+{
+  for(n in c(200,400))
+  {
+    if(model==1)
+    {
+      Power = Record1[Record1$n==n&Record1$penalty==penalty,]
+      Power = Power[order(as.numeric(Power$h)),]
+      h = 1:20
+      data1 = data.frame(h = h, Power = as.numeric(Power$X5), index = rep("1",20))
+      data2 = data.frame(h = h, Power = as.numeric(Power$X6), index = rep("2",20))
+      data3 = data.frame(h = h, Power = as.numeric(Power$X7), index = rep("t1",20))
+      data4 = data.frame(h = h, Power = as.numeric(Power$X8), index = rep("t2",20))
+      plotdata = rbind(data1,data2,data3,data4)
+      t="I"
+      plot_add =  ggplot(plotdata,aes(h,Power,group=index, color = index,shape = index,linetype = index)) + ggtitle(paste("Model ",t," (n=",n,")",sep=""))+ theme_bw()+  theme(plot.title = element_text(hjust = 0.5)) + geom_point(size = 1.5)+ geom_line(linewidth = 0.5)
+      }
+    
+    if(model==2)
+    {
+      Power = Record2[Record2$n==n&Record2$penalty==penalty,]
+      Power = Power[order(as.numeric(Power$h)),]
+      h = 1:20
+      data1 = data.frame(h = h, Power = as.numeric(Power$X5), index = rep("1",20))
+      data2 = data.frame(h = h, Power = as.numeric(Power$X6), index = rep("2",20))
+      data3 = data.frame(h = h, Power = as.numeric(Power$X7), index = rep("3",20))
+      data4 = data.frame(h = h, Power = as.numeric(Power$X8), index = rep("4",20))
+      data5 = data.frame(h = h, Power = as.numeric(Power$X9), index = rep("t1",20))
+      data6 = data.frame(h = h, Power = as.numeric(Power$X10), index = rep("t2",20))
+      plotdata = rbind(data1,data2,data3,data4,data5,data6)
+      t="II"
+      plot_add =  ggplot(plotdata,aes(h,Power,group=index, color = index,shape = index,linetype = index)) + ggtitle(paste("Model ",t," (n=",n,")",sep=""))+ theme_bw()+  theme(plot.title = element_text(hjust = 0.5)) + geom_point(size = 1.5)+ geom_line(linewidth = 0.5)
+    }
+    
+    if(model==3)
+    {
+      Power = Record3[Record3$n==n&Record3$penalty==penalty,]
+      Power = Power[order(as.numeric(Power$h)),]
+      h = 1:20
+      data1 = data.frame(h = h, Power = as.numeric(Power$X5), index = rep("1",20))
+      data2 = data.frame(h = h, Power = as.numeric(Power$X6), index = rep("3",20))
+      data3 = data.frame(h = h, Power = as.numeric(Power$X7), index = rep("p",20))
+      data4 = data.frame(h = h, Power = as.numeric(Power$X8), index = rep("t1",20))
+      data5 = data.frame(h = h, Power = as.numeric(Power$X9), index = rep("t2",20))
+      plotdata = rbind(data1,data2,data3,data4,data5)
+      t="III"
+      plot_add =  ggplot(plotdata,aes(h,Power,group=index, color = index,shape = index,linetype = index)) + ggtitle(paste("Model ",t," (n=",n,")",sep=""))+ theme_bw()+  theme(plot.title = element_text(hjust = 0.5)) + geom_point(size = 1.5)+ geom_line(linewidth = 0.5)
+    }
+ #   Plot_save = Plot_save + plot_add
+    my_plots[[i]] = plot_add
+    i = i + 1
+  }
+}
+grid.arrange(grobs=my_plots,ncol=2)
+##First graph is for lasso
+##Second graph is for SCAD
+}
+```
+
+
+```{r Table 1}
+#Table 1: Empirical Rejection Rate of X1-X5, X_1996 - X_2000
+address = paste(root_path,"/Study 1/Results_h_5/Intermediate Data",sep="")
+file_names = dir(address)
+d = length(file_names)
+for(penalty in c("lasso","SCAD"))
+{
+Record = Record1 = NULL
+for(i in 1:12)
+{
+      selects = file_names[i]#BS 200 400
+      split =  as.vector(str_split(selects,"_"))[[1]]
+      if(split[5]=="lasso")
+      {
+       data = read.csv(paste(address,"/",selects,sep=""))
+      data = t(data)
+      Wn = c("Wn",data[c(2,4,5,6:15)])
+      TNL = c("TNL",data[c(2,4,5,16:25)])
+      model = as.numeric(Wn[3])
+      n = as.numeric(Wn[2])
+      penalty = Wn[4]
+      if(model==1&n==200&penalty=="lasso")
+      {
+        ZZ = read.csv(paste(address,"/",file_names[13],sep=""))[,-1]
+        TZZ = c("TZZ",data[c(2,4,5)],apply(ZZ,2,mean)[c(1:5,1996:2000)])
+        Size = rbind(Wn,TNL,TZZ)
+        Record = rbind(Record,Size)
+      }
+      if(model==1&n==400&penalty=="lasso")
+      {
+        ZZ = read.csv(paste(address,"/",file_names[14],sep=""))[,-1]
+        TZZ = c("TZZ",data[c(2,4,5)],apply(ZZ,2,mean)[c(1:5,1996:2000)])
+        Size = rbind(Wn,TNL,TZZ)
+        Record = rbind(Record,Size)
+      }
+      if(model==2&n==200&penalty=="lasso")
+      {
+        ZZ = read.csv(paste(address,"/",file_names[15],sep=""))[,-1]
+        TZZ = c("TZZ",data[c(2,4,5)],apply(ZZ,2,mean)[c(1:5,1996:2000)])
+        Size = rbind(Wn,TNL,TZZ)
+        Record = rbind(Record,Size)
+      }
+      if(model==2&n==400&penalty=="lasso")
+      {
+        ZZ = read.csv(paste(address,"/",file_names[16],sep=""))[,-1]
+        TZZ = c("TZZ",data[c(2,4,5)],apply(ZZ,2,mean)[c(1:5,1996:2000)])
+        Size = rbind(Wn,TNL,TZZ)
+        Record = rbind(Record,Size)
+      }
+      if(model==3&n==200&penalty=="lasso")
+      {
+        ZZ = read.csv(paste(address,"/",file_names[17],sep=""))[,-1]
+        TZZ = c("TZZ",data[c(2,4,5)],apply(ZZ,2,mean)[c(1:5,1996:2000)])
+        Size = rbind(Wn,TNL,TZZ)
+        Record = rbind(Record,Size)
+      }
+      if(model==3&n==400&penalty=="lasso")
+      {
+        ZZ = read.csv(paste(address,"/",file_names[18],sep=""))[,-1]
+        TZZ = c("TZZ",data[c(2,4,5)],apply(ZZ,2,mean)[c(1:5,1996:2000)])
+        Size = rbind(Wn,TNL,TZZ)
+        Record = rbind(Record,Size)
+      }
+      }
+      if(split[5]=="SCAD")
+      {
+        data = read.csv(paste(address,"/",selects,sep=""))
+        data = t(data)
+        Wn = c("Wn",data[c(2,4,5,6:15)])
+        TNL = c("TNL",data[c(2,4,5,16:25)])
+        Size = rbind(Wn,TNL)
+        Record1 = rbind(Record1,Size)
+      }
+}
+Record = data.frame(Record,row.names = NULL)
+Record[,5:14] = sapply(Record[,5:14],as.numeric)
+Record[,5:14] = sapply(Record[,5:14],function(x) round(x,3))
+colnames(Record)[1:4] = c("Method","n","model","penalty")
+Record1 = data.frame(Record1,row.names = NULL)
+Record1[,5:14] = sapply(Record1[,5:14],as.numeric)
+Record1[,5:14] = sapply(Record1[,5:14],function(x) round(x,3))
+colnames(Record1)[1:4] = c("Method","n","model","penalty")
+}
+Record #Table 1
+Record1 #Table S.1
+```
+
+
+```{r Table 2}
+#Table 2: FDR and Power
+address = paste(root_path,"/FDR/Results/",sep="")
+file_names = dir(address)
+d = length(file_names)
+file_names <- dir(address)
+d = length(file_names)
+Record1 =  Record2 = NULL
+for(i in 1:d)
+{
+  selects = file_names[i]
+  split = as.vector(str_split(selects,"_"))[[1]]
+  model = as.numeric(split[3])
+  n = as.numeric(split[5])
+  s = as.numeric(split[7])
+  h =  str_split(split[8],"\\.")[[1]]
+  alpha = as.numeric(h[1])/10  
+  data = read.csv(paste(root_path,"/FDR/Results/",selects,sep=""))
+  data = t(data)
+  Value = c(n,model,s,alpha,data)
+  if(model == 4)
+  {
+    Record1 = rbind(Record1,Value)
+  }
+  if(model == 5)
+  {
+    Record2 = rbind(Record2,Value)
+  }
+}
+Record1 = data.frame(Record1,row.names = NULL)
+colnames(Record1) = c("n","model","s","alpha","FDR","Power")
+Record1
+Record2 = data.frame(Record2,row.names = NULL)
+colnames(Record2) = c("n","model","s","alpha","FDR","Power")
+Record2
+```
+
+```{r Table 3}
+#Impact of Distribution of X
+address = paste(root_path,"/Study 2/Distribution/Intermediate Data",sep="")
+file_names = dir(address)
+d = length(file_names)
+Record  = NULL
+for(i in 1:d)
+{
+selects = file_names[i]#BS 200 400
+split =  as.vector(str_split(selects,"_"))[[1]]
+model = as.numeric(split[3])
+data = read.csv(paste(address,"/",selects,sep=""))
+data = t(data)
+Dist = data[6]
+Inact_Wn = as.numeric(data[16])
+Inact_TNL = as.numeric(data[30])
+s=10
+d = ifelse(model==1,1,0) + ifelse(model==2,2,0) + ifelse(model==3,3,0) + ifelse(model==4,4,0) + ifelse(model==5,5,0)
+if(model==1)
+{
+  Index_Wn = c(17)
+  Index_TNL = c(31)
+  Size_Wn = rep("$***$",5)
+  Size_TNL = rep("$***$",5)
+  Size_Wn[1:d] = as.numeric(data[Index_Wn])
+  Size_TNL[1:d] = as.numeric(data[Index_TNL])
+}
+
+if(model == 2)
+{
+  Index_Wn = c(17, 17+8)
+  Index_TNL = c(31,39)
+  Size_Wn = rep("$***$",5)
+  Size_TNL = rep("$***$",5)
+  Size_Wn[1:d] = as.numeric(data[Index_Wn])
+  Size_TNL[1:d] = as.numeric(data[Index_TNL])
+}
+
+if(model>2)
+{
+  intv = floor(s/d)
+  location = c(0:(d-1))*(intv) + 1
+  Index_Wn = 16 + location
+  Index_TNL = 17+s+3+location
+  Size_Wn = rep("$***$",5)
+  Size_TNL = rep("$***$",5)
+  Size_Wn[1:d] = as.numeric(data[Index_Wn])
+  Size_TNL[1:d] = as.numeric(data[Index_TNL])
+}
+Size = c(model,Dist,Inact_Wn,Inact_TNL,Size_Wn,Size_TNL)
+Record = rbind(Record,Size)
+}
+Record = data.frame(Record,row.names = NULL)
+colnames(Record) = c("model","Dist","Inactive_Wn","Inactive_TNL","Index1","Index2","Index3","Index4","Index5","Index1","Index2","Index3","Index4","Index5")
+
+Record
+```
+
+```{r Table 4}
+#Table 4: Impact of sparsiy level
+address = paste(root_path,"/Study 2/Sparsity/Intermediate Data",sep="")
+file_names = dir(address)
+d = length(file_names)
+Record  = NULL
+for(i in 1:d)
+{
+selects = file_names[i]#BS 200 400
+split =  as.vector(str_split(selects,"_"))[[1]]
+model = as.numeric(split[3])
+s = as.numeric(split[9])
+data = read.csv(paste(address,"/",selects,sep=""))
+data = t(data)
+Dist = data[6]
+Inact_Wn = as.numeric(data[16])
+Inact_TNL = as.numeric(data[17+s])
+d = ifelse(model==1,1,0) + ifelse(model==2,2,0) + ifelse(model==3,3,0) + ifelse(model==4,4,0) + ifelse(model==5,5,0)
+if(model==1)
+{
+  Index_Wn = c(17)
+  Index_TNL = c(17+s+4)
+  Size_Wn = rep("$***$",5)
+  Size_TNL = rep("$***$",5)
+  Size_Wn[1:d] = as.numeric(data[Index_Wn])
+  Size_TNL[1:d] = as.numeric(data[Index_TNL])
+}
+
+if(model == 2)
+{
+  intv = floor(0.8*s)
+  Index_Wn = c(17, 17+intv)
+  Index_TNL = c(17+s+4,21+s+intv)
+  Size_Wn = rep("$***$",5)
+  Size_TNL = rep("$***$",5)
+  Size_Wn[1:d] = as.numeric(data[Index_Wn])
+  Size_TNL[1:d] = as.numeric(data[Index_TNL])
+}
+
+if(model>2)
+{
+  intv = floor(s/d)
+  location = c(0:(d-1))*(intv) + 1
+  Index_Wn = 16 + location
+  Index_TNL = 17+s+3+location
+  Size_Wn = rep("$***$",5)
+  Size_TNL = rep("$***$",5)
+  Size_Wn[1:d] = as.numeric(data[Index_Wn])
+  Size_TNL[1:d] = as.numeric(data[Index_TNL])
+}
+Size = c(model,Dist,s,Inact_Wn,Inact_TNL,Size_Wn,Size_TNL)
+Record = rbind(Record,Size)
+}
+Record = data.frame(Record,row.names = NULL)
+colnames(Record) = c("model","Dist","s","Inactive_Wn","Inactive_TNL","Index1","Index2","Index3","Index4","Index5","Index1","Index2","Index3","Index4","Index5")
+
+Record
+```
+
+```{r Table 5}
+#Table 5: Real data analysis and the probe ids selected after FDR control
+address = paste(root_path,"/Real Data/Intermediate Data",sep="")
+file_names = dir(address)
+selects = file_names[1]
+ID_probe = read.csv(paste(address,"/",selects,sep=""))
+ID_probe = t(ID_probe[,2])
+selects = file_names[4]#0.75 se rule of chosing lambda
+data = read.csv(paste(address,"/",selects,sep=""))
+p = dim(data)[1]
+bp = 2*log(p) + 2.75*log(log(p))
+ap = 2*log(p) + 3.5*log(log(p))
+stat = data[,1]
+pvalue = data[,2]
+testvalue = qchisq(1-pvalue,5)
+FDP = function(value,cutoff)
+{
+  I = sum(ifelse(value>=cutoff,1,0))
+  quantile = 1-pchisq(cutoff,5)
+  FDP = p*quantile/max(I,1)
+  list(FDP = FDP)
+}
+alpha = 0.05
+first = 0
+end = bp
+u0 = FDP(testvalue,first)$FDP
+u1 = FDP(testvalue,end)$FDP
+criterion = abs(u1-u0)
+step = 0
+while(criterion>=10^(-5)&step<=2000)
+{
+  temp0 = first
+  temp1 = end
+  middle = 0.5*first + 0.5*end
+  tvalue = FDP(testvalue,middle)$FDP
+  if(tvalue<alpha)
+  {
+    end = middle
+  }
+  if(tvalue>alpha)
+  {
+    first = middle
+  }
+  if(tvalue==alpha)
+  {
+    break
+  }
+  criterion = abs(tvalue-alpha)
+  cutoff = middle
+  step = step+1
+}
+if(abs(cutoff-bp)<=0.001)
+{
+  cutoff = ap
+}
+names = ID_probe[which(testvalue>=cutoff)]
+#names[order(pvalue[testvalue>=cutoff])] #Probe IDs
+#sort(pvalue[testvalue>=cutoff])#pvalues
+Result = rbind(names[order(pvalue[testvalue>=cutoff])],sort(pvalue[testvalue>=cutoff]))
+Result
+```
+
+```{r Table S.2}
+#Table S.2: Impact of Transformations
+address = paste(root_path,"/Study 2/Transformation/Intermediate Data",sep="")
+file_names = dir(address)
+d = length(file_names)
+Record  = NULL
+for(i in 1:d)
+{
+selects = file_names[i]#BS 200 400
+split =  as.vector(str_split(selects,"_"))[[1]]
+model = as.numeric(split[3])
+s = as.numeric(split[9])
+data =  read.csv(paste(address,"/",selects,sep=""))
+data = t(data)
+Trans = data[7]
+Inact_Wn = as.numeric(data[16])
+Inact_TNL = as.numeric(data[17+s])
+d = ifelse(model==1,1,0) + ifelse(model==2,2,0) + ifelse(model==3,3,0) + ifelse(model==4,4,0) + ifelse(model==5,5,0)
+if(model==1)
+{
+  Index_Wn = c(17)
+  Index_TNL = c(17+s+4)
+  Size_Wn = rep("$***$",5)
+  Size_Wn[1:d] = as.numeric(data[Index_Wn])
+}
+
+if(model == 2)
+{
+  intv = floor(0.8*s)
+  Index_Wn = c(17, 17+intv)
+  Index_TNL = c(17+s+4,21+s+intv)
+  Size_Wn = rep("$***$",5)
+  Size_Wn[1:d] = as.numeric(data[Index_Wn])
+}
+
+if(model>2)
+{
+  intv = floor(s/d)
+  location = c(0:(d-1))*(intv) + 1
+  Index_Wn = 16 + location
+  Size_Wn = rep("$***$",5)
+  Size_Wn[1:d] = as.numeric(data[Index_Wn])
+}
+Size = c(model,Trans,s,Inact_Wn,Size_Wn)
+Record = rbind(Record,Size)
+}
+Record = data.frame(Record,row.names = NULL)
+colnames(Record) = c("model","Transformation","s","Inactive","Index1","Index2","Index3","Index4","Index5")
+
+Record
+```
+
+```{r Table S.3}
+#Table S.3: Performance of Model VI' with d =10
+address = paste(root_path,"/Study 2/Extreme_d/Result",sep="")
+file_names = dir(address)
+d = length(file_names)
+selects = file_names[1]#BS 200 400
+data =  read.csv(paste(address,"/",selects,sep=""))
+data = t(data)
+s = 10
+Size_Wn = c("Wn",data[16:26])
+Size_TNL = c("TNL",data[30:40])
+Size = rbind(Size_Wn,Size_TNL)
+Size = data.frame(Size)
+colnames(Size) = c("method","Inactive1","Index1","Index2","Index3","Index4","Index5","Index6","Index7","Index8","Index9","Index10")
+Size
+```
+
+```{r Table S.4}
+#Table S.4: Semi-synthetic study
+address = paste(root_path,"/Study 2/Semi-synthetic/Intermediate Data",sep="")
+file_names = dir(address)
+d = length(file_names)
+Record  = NULL
+for(i in 1:d)
+{
+selects = file_names[i]#BS 200 400
+split =  as.vector(str_split(selects,"_"))[[1]]
+model = as.numeric(split[3])
+data = read.csv(paste(address,"/",selects,sep=""))
+data = data[9:36,]
+data = as.numeric(t(data))
+Wn = c(model,"Wn",data[4:14])
+TNL = c(model,"TNL",data[18:28])
+Size = rbind(Wn,TNL)
+Record = rbind(Record,Size)
+}
+Record = data.frame(Record,row.names = NULL)
+colnames(Record) = c("model","method","Inactive1","X1","X2","X3","X4","X5","X6","X7","X8","X9","X10")
+
+Record
+```
+
+```{r Table S.5}
+#Table S.5: Probe IDs selected with respect to different standard error rules after FDR control
+address = paste(root_path,"/Real Data/Intermediate Data",sep="")
+file_names = dir(address)
+selects = file_names[1]
+ID_probe = read.csv(paste(address,"/",selects,sep=""))
+ID_probe = t(ID_probe[,2])
+for(case in c(3,4,2))
+{
+selects = file_names[case]#0.75 se rule of chosing lambda
+data = read.csv(paste(address,"/",selects,sep=""))
+p = dim(data)[1]
+bp = 2*log(p) + 2.75*log(log(p))
+ap = 2*log(p) + 3.5*log(log(p))
+stat = data[,1]
+pvalue = data[,2]
+testvalue = qchisq(1-pvalue,5)
+FDP = function(value,cutoff)
+{
+  I = sum(ifelse(value>=cutoff,1,0))
+  quantile = 1-pchisq(cutoff,5)
+  FDP = p*quantile/max(I,1)
+  list(FDP = FDP)
+}
+alpha = 0.05
+first = 0
+end = bp
+u0 = FDP(testvalue,first)$FDP
+u1 = FDP(testvalue,end)$FDP
+criterion = abs(u1-u0)
+step = 0
+while(criterion>=10^(-5)&step<=2000)
+{
+  temp0 = first
+  temp1 = end
+  middle = 0.5*first + 0.5*end
+  tvalue = FDP(testvalue,middle)$FDP
+  if(tvalue<alpha)
+  {
+    end = middle
+  }
+  if(tvalue>alpha)
+  {
+    first = middle
+  }
+  if(tvalue==alpha)
+  {
+    break
+  }
+  criterion = abs(tvalue-alpha)
+  cutoff = middle
+  step = step+1
+}
+if(abs(cutoff-bp)<=0.001)
+{
+  cutoff = ap
+}
+names = ID_probe[which(testvalue>=cutoff)]
+print(names[order(pvalue[testvalue>=cutoff])]) #Probe IDs
+#sort(pvalue[testvalue>=cutoff])#pvalues
+}
+```
