@@ -39,14 +39,14 @@ for(k in 1:1000)
 {
   time0 = Sys.time()
   Result0 = Highdim.Semi(X0,h,hfix,s,location,"Bspline","lasso",model,delta,seed = k)#X,h,hfix,s,d,location,choice2,active,penalty,model,delta,seed
-  Score_save = Result0$pvalue
-  Sigma_save = Result0$stat
-  Decor_save = Result0$pvalue.decor
-  Record_decor_add = ifelse(Result0$pvalue.decor<=0.05,1,0)
-  Record_add = ifelse(Result0$pvalue<=0.05,1,0)
-  Record = rbind(Record,Record_add)
-  Record0 = rbind(Record0, Score_save)
-  Record1 = rbind(Record1, Sigma_save)
+    Pvalue_save = Result0$pvalue #pvalues of Wn
+    Stat_save = Result0$stat #stat of Wn
+    Decor_save = Result0$pvalue.decor #pvalue of decorrelated score
+    Record_decor_add = ifelse(Result0$pvalue.decor<=0.05,1,0)
+    Record_add = ifelse(Result0$pvalue<=0.05,1,0)
+    Record = rbind(Record,Record_add)
+    Record0 = rbind(Record0, Pvalue_save)
+    Record1 = rbind(Record1, Stat_save)
   Record_decor = rbind(Record_decor, Record_decor_add)
   time1 = Sys.time()
   Type1 = apply(Record,2,mean)#Empirical rejection rate of Wn

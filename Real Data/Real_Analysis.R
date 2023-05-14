@@ -39,7 +39,7 @@ penalty = "lasso"
 h = 5 
 a = 0.75
 Result = Highdim.Real(X,Y,h,penalty,a)
-record = Result$record
+record = Result$record #pvalues of all variables
 #write.csv(record,paste("Real_Data_Pvalue_",100*a,"se",".csv",sep=""),row.names = FALSE)
 data = record
 ################################
@@ -51,8 +51,8 @@ data = record
 #IDs = t(IDs[,2])
 #pvalue = data[,2]
 pvalue = data #If do not load the saving data
-testvalue = qchisq(1-pvalue,h)
-alpha = 0.05
+testvalue = qchisq(1-pvalue,h) #statistic values
+alpha = 0.05 #FDR level
 Result_FDR = FDR.Real(pvalue,p,alpha)
 cutoff = Result_FDR$cutoff
 names = IDs[(testvalue>=cutoff)]

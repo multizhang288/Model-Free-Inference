@@ -206,11 +206,11 @@ for(i in 1:12)
 Record = data.frame(Record,row.names = NULL)
 Record[,5:14] = sapply(Record[,5:14],as.numeric)
 Record[,5:14] = sapply(Record[,5:14],function(x) round(x,3))
-colnames(Record)[1:4] = c("Method","n","model","penalty")
+colnames(Record) = c("Method","n","model","penalty","X1","X2","X3","X4","X5","X1996","X1997","X1998","X1999","X2000")
 Record1 = data.frame(Record1,row.names = NULL)
 Record1[,5:14] = sapply(Record1[,5:14],as.numeric)
 Record1[,5:14] = sapply(Record1[,5:14],function(x) round(x,3))
-colnames(Record1)[1:4] = c("Method","n","model","penalty")
+colnames(Record1) = c("Method","n","model","penalty","X1","X2","X3","X4","X5","X1996","X1997","X1998","X1999","X2000")
 }
 Record #Table 1
 Record1 #Table S.1

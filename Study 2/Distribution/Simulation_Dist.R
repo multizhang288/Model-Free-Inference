@@ -39,14 +39,14 @@ for(q in 1:repeatnum)
     seed = q  
     time0 = Sys.time()
     Result0 = Highdim.Study2(n,p,h,hfix,s,d,Dist,Trans,active,penalty,CovMatrix,model,delta,Inactive,seed)
-    Score_save = Result0$pvalue
-    Sigma_save = Result0$stat
-    Decor_save = Result0$pvalue.decor
+    Pvalue_save = Result0$pvalue #pvalus of Wn
+    Stat_save = Result0$stat #statistics of Wn
+    Decor_save = Result0$pvalue.decor #pvalues of decorrelated score
     Record_decor_add = ifelse(Result0$pvalue.decor<=0.05,1,0)
     Record_add = ifelse(Result0$pvalue<=0.05,1,0)
     Record = rbind(Record,Record_add)
-    Record0 = rbind(Record0, Score_save)
-    Record1 = rbind(Record1, Sigma_save)
+    Record0 = rbind(Record0, Pvalue_save)
+    Record1 = rbind(Record1, Stat_save)
     Record_decor = rbind(Record_decor, Record_decor_add)
     time1 = Sys.time()
     Type1 = apply(Record,2,mean)#

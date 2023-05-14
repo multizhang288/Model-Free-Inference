@@ -29,8 +29,8 @@ for(q in 1:repeatnum)
 {
   tryCatch({
     Result0 =  Highdim.Fast(n,p,rho,h,penalty,model,q,interest)
-    Pval1_save = Result0$pvalue
-    Pval2_save = Result0$pvalue1
+    Pval1_save = Result0$pvalue #pvalues of Wn
+    Pval2_save = Result0$pvalue1#pvalues of TNL
     Record_decor_add = ifelse(Result0$pvalue1<=0.05,1,0)
     Record_add = ifelse(Result0$pvalue<=0.05,1,0)
     Record = rbind(Record,Record_add)
