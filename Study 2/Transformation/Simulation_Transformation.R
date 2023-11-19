@@ -10,6 +10,7 @@ repeatnum = 10
 n=n1= 200
 p=40
 CovMatrix = matrix(rep(0,p^2),p,p)
+rho = 0.5
 for(i in 1:p)
 {
   for(j in 1:p)
@@ -38,7 +39,7 @@ for(q in 1:repeatnum)
   tryCatch({
     seed = q  
     time0 = Sys.time()
-    Result0 = Highdim.Study2(n,p,h,hfix,s,d,Dist,Trans,active,penalty,CovMatrix,model,delta,Inactive,seed)
+    Result0 = Highdim.Study2(n,p,h,hfix,s,Dist,Trans,active,penalty,CovMatrix,model,delta,Inactive,seed)
     Pvalue_save = Result0$pvalue #pvalues of Wn
     Stat_save = Result0$stat #stat of Wn
     Decor_save = Result0$pvalue.decor #pvalue of decorrelated score

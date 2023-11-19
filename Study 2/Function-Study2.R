@@ -25,8 +25,9 @@ data_seq = function(x,h)
   then = quantile(x,probs=value)
   return(as.numeric(then))
 }
+sigma = 1 #standard error of noise
 #################################
-Highdim.Study2 = function(n,p,h,hfix,s,d,Dist,Trans,active,penalty,CovMatrix,model,delta,Inactive,seed)
+Highdim.Study2 = function(n,p,h,hfix,s,Dist,Trans,active,penalty,CovMatrix,model,delta,Inactive,seed)
   {
   ################
   #n: sample size
@@ -34,7 +35,6 @@ Highdim.Study2 = function(n,p,h,hfix,s,d,Dist,Trans,active,penalty,CovMatrix,mod
   #h: degrees of freedom for B-spline Basis
   #hfix: if hfix = -1, h is forced to be 7. Otherwise, set your own h
   #s: sparsity level
-  #d: the minimum structural dimension
   #Dist: distribution of X. MVN, Mixture, MSN, Tdist and Chi
   #Trans: transformation of Y. Bspline, SIR, SIR2 and Poly
   #active: random: the indices of active variables are evenly set across 1:p. Otherwise, the first 1:s variables are active 

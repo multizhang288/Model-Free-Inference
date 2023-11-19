@@ -11,6 +11,7 @@ repeatnum = 1000 #number of simulations
 n=n1= 200
 p=20
 CovMatrix = matrix(rep(0,p^2),p,p)
+rho=0.5
 for(i in 1:p)
 {
   for(j in 1:p)
@@ -27,7 +28,7 @@ delta=1 #signal strength
 #Dist= "MVN" # "MVN","MSN","Mixture","Tdist","Chi"
 active="random" #random or consecutive. random means the indices of active variables are evenly distributed.
 Trans ="Bspline" #Poly, SIR, SIR2 or Bspline
-Inactive = c(19)#The indices of inactive variables.
+Inactive = c(18)#The indices of inactive variables.
 sigma = 1#std of noise
 Record = Record0 = Record1 = Record_decor = NULL
 #####
@@ -38,7 +39,7 @@ for(q in 1:repeatnum)
   tryCatch({
     seed = q  
     time0 = Sys.time()
-    Result0 = Highdim.Study2(n,p,h,hfix,s,d,Dist,Trans,active,penalty,CovMatrix,model,delta,Inactive,seed)
+    Result0 = Highdim.Study2(n,p,h,hfix,s,Dist,Trans,active,penalty,CovMatrix,model,delta,Inactive,seed)
     Pvalue_save = Result0$pvalue #pvalus of Wn
     Stat_save = Result0$stat #statistics of Wn
     Decor_save = Result0$pvalue.decor #pvalues of decorrelated score
@@ -65,3 +66,4 @@ for(q in 1:repeatnum)
   },error=function(e){cat("ERROR","\n")})
 }
 }
+
