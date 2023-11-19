@@ -36,3 +36,12 @@ Folder Study 2 contains the simulation codes and results of Study 2, S.4.2, S.4.
    -RatEyeExpression.txt: Real data of rat eyes gene measurements
    -Functions_Semi.R: Core funcitions
    -Semisynthetic.R: Simualtion script 
+
+##########################
+ -Adversarial Example: Section S.4.6
+
+   -Functions_Adversarial.R: Core funcitions
+   -Simulation_Adversarial.R: Simualtion script 
+      -Data_Analysis.R: Generate Figure S.3
+        -Intermediate data: 11 .csv files like "Impact_Adversarial__n_400_h_7_d_1_delta_1_df_0_Trans_Bspline_end"
+        -Results: Figure S.3

@@ -4,7 +4,7 @@ output:
   html_document:
     df_print: paged
   pdf_document: default
-date: "2023-04-17"
+date: "2023-11-17"
 ---
 
 ```{r setup, include=FALSE}
@@ -256,6 +256,7 @@ Record2
 
 ```{r Table 3}
 #Impact of Distribution of X
+#Full datasets are linked to our github
 address = paste(root_path,"/Study 2/Distribution/Intermediate Data",sep="")
 file_names = dir(address)
 d = length(file_names)
@@ -588,4 +589,32 @@ names = ID_probe[which(testvalue>=cutoff)]
 print(names[order(pvalue[testvalue>=cutoff])]) #Probe IDs
 #sort(pvalue[testvalue>=cutoff])#pvalues
 }
+```
+
+```{r Figure S.3}
+#Figure S.3: Empirical rejection rate when $\bX$ is mixture normal distributed with respect to different $df$.
+address = paste(root_path,"/Study 2/Adversarial Example/Intermediate Data",sep="")
+file_names <- dir(address)
+d = length(file_names)
+Record  = NULL
+for(i in 1:d)
+{
+  selects = file_names[i]#BS 200 400
+  data = read.csv(paste(address,"/",selects,sep=""))
+  data = t(data)
+  df = as.numeric(data[6])
+  ERR = as.numeric(data[c(11,13)])
+  Size = c(df,ERR)
+  Record = rbind(Record,Size)
+}
+Record = data.frame(Record)
+colnames(Record) = c("df","X2","X1")
+#######################
+Power = Record[order(as.numeric(Record$df)),]
+df = 1:11
+data1 = data.frame(df = df, Power = as.numeric(Power$X2), index = rep("X2",11))
+data2 = data.frame(df = df, Power = as.numeric(Power$X1), index = rep("X1",11))
+plotdata = rbind(data1,data2)
+Figure =  ggplot(plotdata,aes(x = df ,Power,group=index, color = index,shape = index,linetype = index)) + ggtitle("Mixture distribution with respect to df")+ theme_bw()+  theme(plot.title = element_text(hjust = 0.5)) + geom_point(size = 1.5)+ geom_line(linewidth = 0.5)
+Figure
 ```

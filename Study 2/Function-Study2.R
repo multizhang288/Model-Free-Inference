@@ -65,48 +65,24 @@ Highdim.Study2 = function(n,p,h,hfix,s,Dist,Trans,active,penalty,CovMatrix,model
   }
   if(Dist == "Mixture")
   {
-    chose = sample(c(1,2,3),1,prob=c(0.4,0.2,0.4))
-    if(chose==1)
-    {
-      CovMatrix2 = matrix(rep(0,p^2),p,p)
-      for(i in 1:p)
-      {
-        for(j in 1:p)
-        {
-          CovMatrix2[i,j] = 0.2^(abs(i-j))  
-        }
-      }
-      mu = rep(0,p)
-      mu[1:6] = -1 
-      X = rmvnorm(n,mu,CovMatrix2)
-    }
-    if(chose==2)
-    {
-      CovMatrix2 = matrix(rep(0,p^2),p,p)
-      for(i in 1:p)
-      {
-        for(j in 1:p)
-        {
-          CovMatrix2[i,j] = 0.5^(abs(i-j))  
-        }
-      }
-      mu = rep(0,p)
-      X = rmvnorm(n,mu,CovMatrix2)
-    }
-    if(chose==3)
-    {
-      CovMatrix2 = matrix(rep(0,p^2),p,p)
-      for(i in 1:p)
-      {
-        for(j in 1:p)
-        {
-          CovMatrix2[i,j] = 0.8^(abs(i-j))  
-        }
-      }
-      mu = rep(0,p)
-      mu[1:6] = 1 
-      X = rmvnorm(n,mu,CovMatrix2)
-    }
+      mu = matrix(rep(0,n*p),n,p)#rep(0,p)
+      X = mu
+      mu[,1:6] = -1 
+      X_1 = gen_error(n,p,0.2,seed = seed) + mu
+##########
+      X_2 = gen_error(n,p,0.5,seed = seed)
+##########
+      mu = matrix(rep(0,n*p),n,p)#rep(0,p)
+      mu[,1:6] = 1 
+      X_3 = gen_error(n,p,0.8,seed = seed) + mu
+ ###############
+      U = runif(n,0,1)
+      U_1 = which(U<=0.4)
+      U_2 = which(U<=0.6&U>0.4)
+      U_3 = which(U>0.6)
+      X[U_1,] = X_1[U_1,]
+      X[U_2,] = X_2[U_2,]
+      X[U_3,] = X_3[U_3,]
   }
   if(Dist == "MSN")
   {
