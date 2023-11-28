@@ -27,7 +27,7 @@ data_seq = function(x,h)
   return(as.numeric(then))
 }
 #################################
-Highdim.Ad = function(n,p,h,hfix,s,df,Trans,penalty,delta,Inactive,seed)
+Highdim.Ad.Nomgt = function(n,p,h,hfix,s,df,Trans,penalty,delta,Inactive,seed)
   {
   ################
   #n: sample size
@@ -35,40 +35,25 @@ Highdim.Ad = function(n,p,h,hfix,s,df,Trans,penalty,delta,Inactive,seed)
   #h: degrees of freedom for B-spline Basis
   #hfix: if hfix = -1, h is forced to be 7. Otherwise, set your own h
   #s: sparsity level
-  #d: the minimum structural dimension
   #df: degree of freedom of Chi-squared distribution
   #Trans: transformation of Y. Bspline, SIR, SIR2 and Poly
-  #active: random: the indices of active variables are evenly set across 1:p. Otherwise, the first 1:s variables are active 
   #penalty: "lasso" or "SCAD"
-  #CovMatirx: covariance matrix of X
-  #model: data-generation model
   #delta: strength of active variables
   #seed: seed
   ################
   set.seed(seed)
   sigma = 1
-  mu = matrix(rep(0,n*p),n,p)#rep(0,p)
-  X = mu
-  mu[,1:min(floor(p/2),100)] = -df 
-  X_1 = gen_error(n,p,0,seed = seed) + mu
-  ##########
-  mu = matrix(rep(0,n*p),n,p)#rep(0,p)
-  mu[,1:min(floor(p/2),100)] = df 
-  X_2 = gen_error(n,p,0,seed = seed) + mu
-  ###############
-  U = runif(n,0,1)
-  U_1 = which(U<=0.5)
-  U_2 = which(U>0.5)
-  X[U_1,] = X_1[U_1,]
-  X[U_2,] = X_2[U_2,]
-  interest = c(Inactive,1)
- ###########################  
+  X = gen_error(n,p,0.5,seed = seed) 
+  interest = c(Inactive,1:4)
+  ###########################Transformation
+  X = (abs(X))^(df)*sign(X)
+  ###########################  
   index.ini = 1:p
     error <- rnorm(n = n,0,sigma) 
     beta.true = rep(0,p)
     beta.true[1] = delta
-    Y =  abs(X%*%beta.true + 3) + 1*error
-    d=1
+    Y =  (X[,1] + X[,2])/((1.5 + X[,3] + X[,4])^2 + 0.5) + 0.5*error
+    d=2
     if(hfix==-1)
     {
       h=7

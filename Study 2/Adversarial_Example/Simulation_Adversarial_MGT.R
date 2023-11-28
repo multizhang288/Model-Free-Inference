@@ -3,32 +3,30 @@
 #You can set the parameters as the paper to reproduce the results, the computational cost is high.
 ######################################
 #Set the path of this script
-#setwd("D:/Project_Revision/MF_Inference_Simulations/Study 2/Adversarial Example")
+#setwd("D:/Project_Revision/MF_Inference_Simulations/Study 2/Distribution")
 #root_path = dirname(getwd())
-source("Function-Adversarial.R")
+source("Function-Adversarial_MGT.R")#source(paste(root_path,"/Function-Study2.R",sep=""))
 #####
 repeatnum = 1000 #number of simulations
 n=n1= 400
-p=20
+p=2000
 penalty = "lasso"
 s= 5#sparsity level
 hfix= -1 #if hfix !=-1, you can choose h, otherwise h is fixed as 7 when model is 1-5.
 h=7
 delta=1 #signal strength
-df= 1 # the nonzero value of mu_1 and mu_2
+df= 0 # the nonzero value of mu_1 and mu_2
 Trans ="Bspline" #Poly, SIR, SIR2 or Bspline
-Inactive = c(2)#The indices of inactive variables.
+Inactive = c(5, 365)#The indices of inactive variables.
 sigma = 1#std of noise
 Record = Record0 = Record1 = Record_decor = NULL
 #####
-#for(Dist in c("Mixture", "Cauchy"))
-#{
 for(q in 1:repeatnum)
 {
   tryCatch({
     seed = q  
     time0 = Sys.time()
-    Result0 = Highdim.Study2(n,p,h,hfix,s,df,Trans,penalty,delta,Inactive,seed)
+    Result0 = Highdim.Ad.MGT(n,p,h,hfix,s,df,Trans,penalty,delta,Inactive,seed)
     Pvalue_save = Result0$pvalue #pvalus of Wn
     Stat_save = Result0$stat #statistics of Wn
     Decor_save = Result0$pvalue.decor #pvalues of decorrelated score
@@ -55,4 +53,4 @@ for(q in 1:repeatnum)
     
   },error=function(e){cat("ERROR","\n")})
 }
-#}
+

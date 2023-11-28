@@ -40,8 +40,12 @@ Folder Study 2 contains the simulation codes and results of Study 2, S.4.2, S.4.
 ##########################
  -Adversarial Example: Section S.4.6
 
-   -Functions_Adversarial.R: Core funcitions
-   -Simulation_Adversarial.R: Simualtion script 
+   -Functions_Adversarial_MGT.R: Core funcitions with MGU
+   -Simulation_Adversarial_MGT.R: Simualtion script with MGT
+         -Functions_Adversarial_Nomgt.R: Core funcitions without MGT
+        -Simulation_Adversarial_Nomgt.R: Simualtion script without MGT
+
       -Data_Analysis.R: Generate Figure S.3
-        -Intermediate data: 11 .csv files like "Impact_Adversarial__n_400_h_7_d_1_delta_1_df_0_Trans_Bspline_end"
+        -Intermediate data MGT: The simulation output with MGT, 13 .csv files like "Impact_Adversarial__n_400_h_7_d_1_delta_1_df_0_Trans_Bspline_end"
+        -Intermediate data Nomgt: The simulation output without MGT, 13 .csv files like "Impact_Adversarial__n_400_h_7_d_1_delta_1_df_0_Trans_Bspline_end"
         -Results: Figure S.3
