@@ -1,8 +1,8 @@
-Folder Real Data is about the subsection 5.3 Real Data Analysis
+Folder Real Data is about the subsection 5.3 and S.4.5 Real Data Analysis
 
 -Real_Analysis.R: Analysis the real data
 -Functions_Real.R: Core functions used in real data analysis or any given X and Y
--Plot.R: Codes of FIgure 2
+-Plot.R: Codes of Figure S.2
 -Data: contains the rat eyes data
 -RatEyeExpression.txt
 

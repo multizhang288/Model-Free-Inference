@@ -35,6 +35,12 @@ for(i in 1:n)
   Y[i] = (Y[i]-mu_y)/std_Y
 }
 #####
+#X: Predictors
+#Y: Response Variable
+#h: Numbers of Transformation functions
+#penalty: "lasso" or "SCAD"
+#a: the scale coefficient of standard error
+#####
 penalty = "lasso"
 h = 5 
 a = 0.75

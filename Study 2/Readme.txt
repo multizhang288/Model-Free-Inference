@@ -27,23 +27,23 @@ Folder Study 2 contains the simulation codes and results of Study 2, S.4.2, S.4.
    -Results: Table S.2
 
 ############################
- -Extreme_d: Section S.4.3
-    -Simulation_Extreme_d.R: Generate Table S.3
-
+     -Extreme_d: Section S.4.3
+     -Simulation_Extreme_d.R: Generate Table S.3
+   -Results: Table S.3
 ##########################
  -Semi-synthetic: Section S.4.4
 
    -RatEyeExpression.txt: Real data of rat eyes gene measurements
    -Functions_Semi.R: Core funcitions
    -Semisynthetic.R: Simualtion script 
-
+   -Results: Table S.4
 ##########################
  -Adversarial Example: Section S.4.6
 
-   -Functions_Adversarial_MGT.R: Core funcitions with MGU
+   -Functions_Adversarial_MGT.R: Core funcitions with MGT
    -Simulation_Adversarial_MGT.R: Simualtion script with MGT
-         -Functions_Adversarial_Nomgt.R: Core funcitions without MGT
-        -Simulation_Adversarial_Nomgt.R: Simualtion script without MGT
+   -Functions_Adversarial_Nomgt.R: Core funcitions without MGT
+   -Simulation_Adversarial_Nomgt.R: Simualtion script without MGT
 
       -Data_Analysis.R: Generate Figure S.3
         -Intermediate data MGT: The simulation output with MGT, 13 .csv files like "Impact_Adversarial__n_400_h_7_d_1_delta_1_df_0_Trans_Bspline_end"

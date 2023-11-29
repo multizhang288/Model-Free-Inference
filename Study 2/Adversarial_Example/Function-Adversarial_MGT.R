@@ -27,15 +27,14 @@ data_seq = function(x,h)
   return(as.numeric(then))
 }
 #################################
-Highdim.Ad.MGT = function(n,p,h,hfix,s,df,Trans,penalty,delta,Inactive,seed)
+Highdim.Ad.MGT = function(n,p,h,hfix,df,Trans,penalty,delta,Inactive,seed)
   {
   ################
   #n: sample size
   #p: dimension of covariates
   #h: degrees of freedom for B-spline Basis
   #hfix: if hfix = -1, h is forced to be 7. Otherwise, set your own h
-  #s: sparsity level
-  #df: degree of freedom of Chi-squared distribution
+  #df: degree of freedom  
   #Trans: transformation of Y. Bspline, SIR, SIR2 and Poly
   #penalty: "lasso" or "SCAD"
   #delta: strength of active variables
@@ -51,8 +50,7 @@ Highdim.Ad.MGT = function(n,p,h,hfix,s,df,Trans,penalty,delta,Inactive,seed)
   index.ini = 1:p
     error <- rnorm(n = n,0,sigma) 
     beta.true = rep(0,p)
-    beta.true[1] = delta
-    Y =  (X[,1] + X[,2])/((1.5 + X[,3] + X[,4])^2 + 0.5) + 0.5*error
+    Y =  delta*(X[,1] + X[,2])/((1.5 + X[,3] + X[,4])^2 + 0.5) + 0.5*error
     d=2
     if(hfix==-1)
     {
