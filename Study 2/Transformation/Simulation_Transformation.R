@@ -33,7 +33,7 @@ sigma = 1#std of noise
 #####
 for(Trans in c("Bspline","Poly","SIR","SIR2"))
 {
-  Record = Record0 = Record1 = Record_decor = NULL
+Record = Record0 = Record1 = Record_decor = NULL
 for(q in 1:repeatnum)
 {
   tryCatch({
