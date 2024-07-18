@@ -9,7 +9,7 @@ source(paste(root_path,"/Function-Study2.R",sep=""))
 #####
 repeatnum = 1000
 n=n1= 200
-p=20
+p=200
 CovMatrix = matrix(rep(0,p^2),p,p)
 rho=0.5
 for(i in 1:p)
@@ -29,10 +29,10 @@ active="random" #random or consecutive. random means the indices of active varia
 Trans ="Bspline" #Poly, SIR, SIR2 or Bspline
 #Inactive = c(256,512,1024,1536)# Used when p =2000.
 Inactive = c(18)#The indices of inactive variables.
-Record = Record0 = Record1 = Record_decor = NULL
 #####
 for(s in c(10,20,30,40,50))
 {
+  Record = Record0 = Record1 = Record_decor = NULL
 for(q in 1:repeatnum)
 {
   tryCatch({

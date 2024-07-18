@@ -30,10 +30,10 @@ active="random" #random or consecutive. random means the indices of active varia
 Trans ="Bspline" #Poly, SIR, SIR2 or Bspline
 Inactive = c(18)#The indices of inactive variables.
 sigma = 1#std of noise
-Record = Record0 = Record1 = Record_decor = NULL
 #####
 for(Dist in c("MVN","MSN","Mixture","Tdist","Chi"))
 {
+  Record = Record0 = Record1 = Record_decor = NULL
 for(q in 1:repeatnum)
 {
   tryCatch({

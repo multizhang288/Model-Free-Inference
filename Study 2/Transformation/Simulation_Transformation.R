@@ -30,10 +30,10 @@ s = 10#sparsity level
 #Inactive = c(256,512,1024,1536)# Used when p =2000.
 Inactive = c(18)#The indices of inactive variables.
 sigma = 1#std of noise
-Record = Record0 = Record1 = Record_decor = NULL
 #####
 for(Trans in c("Bspline","Poly","SIR","SIR2"))
 {
+  Record = Record0 = Record1 = Record_decor = NULL
 for(q in 1:repeatnum)
 {
   tryCatch({
