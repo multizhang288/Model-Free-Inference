@@ -20,7 +20,7 @@ for(i in 1:p)
   }
 }
 penalty = "lasso"
-model= 1 #1: model I', 2: model II', 3: model III', 4: model IV' and 5: model V'
+model= 3 #1: model I', 2: model II', 3: model III', 4: model IV' and 5: model V'
 s= 10#sparsity level
 hfix= -1 #if hfix !=-1, you can choose h, otherwise h is fixed as 7 when model is 1-5.
 h=7
